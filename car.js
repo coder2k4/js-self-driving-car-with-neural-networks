@@ -16,6 +16,11 @@ class Car {
     }
 
     update() {
+        this.#move()
+    }
+
+
+    #move() {
         if (this.controls.forward) {
             this.speed += this.acceleration
         }
@@ -25,11 +30,11 @@ class Car {
         }
 
         // Проверка максимальной скорости
-        if (this.speed > this.maxSpeed / 2)
-            this.speed = this.maxSpeed / 2
+        if (this.speed > this.maxSpeed)
+            this.speed = this.maxSpeed
 
-        if (this.speed < -this.maxSpeed)
-            this.speed = -this.maxSpeed
+        if (this.speed < -this.maxSpeed / 2)
+            this.speed = -this.maxSpeed / 2
 
         // Трение
         if (this.speed > 0)
@@ -39,17 +44,28 @@ class Car {
         if (Math.abs(this.speed) < this.friction)
             this.speed = 0
 
-        this.y -= this.speed
 
-        // Рабора с углами
-        if(this.controls.left) {
-            this.angle -= 0.03
+
+
+        //Переворот управления если едем назад
+        if (this.speed !== 0)
+        {
+            const flip = this.speed > 0 ? 1 : -1;
+            // Рабора с углами
+            if (this.controls.left) {
+                this.angle += 0.03 * flip
+            }
+
+            if (this.controls.right) {
+                this.angle -= 0.03 * flip
+            }
         }
 
-        if(this.controls.right) {
-            this.angle += 0.03
-        }
+        this.x -= Math.sin(this.angle) * this.speed
+        this.y -= Math.cos(this.angle) * this.speed
     }
+
+
 
     draw(ctx) {
         ctx.save()
