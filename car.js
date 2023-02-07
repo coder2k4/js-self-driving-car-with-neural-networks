@@ -11,12 +11,16 @@ class Car {
         this.friction = 0.05
         this.angle = 0
 
+
+        //Сенсоры
+        this.sensor = new Sensor(this)
         // Управление
         this.controls = new Controls()
     }
 
-    update() {
+    update(roadBorders) {
         this.#move()
+        this.sensor.update(roadBorders)
     }
 
 
@@ -45,11 +49,8 @@ class Car {
             this.speed = 0
 
 
-
-
         //Переворот управления если едем назад
-        if (this.speed !== 0)
-        {
+        if (this.speed !== 0) {
             const flip = this.speed > 0 ? 1 : -1;
             // Рабора с углами
             if (this.controls.left) {
@@ -66,7 +67,6 @@ class Car {
     }
 
 
-
     draw(ctx) {
         ctx.save()
         ctx.translate(this.x, this.y)
@@ -81,6 +81,9 @@ class Car {
         )
         ctx.fill()
 
+
         ctx.restore()
+
+        this.sensor.draw(ctx)
     }
 }

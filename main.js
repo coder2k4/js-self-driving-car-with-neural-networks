@@ -10,14 +10,12 @@ document.addEventListener("DOMContentLoaded", () => {
     // Отрисовка машины
     const ctx = canvas.getContext("2d");
     const car = new Car(lineCenter, 100, 30, 50);
-    car.draw(ctx);
-
 
 
     animate()
 
     function animate() {
-        car.update()
+        car.update(road.borders)
         canvas.height = window.innerHeight // очищаем хост
 
         ctx.save()
@@ -25,7 +23,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         road.draw(ctx)
         car.draw(ctx)
-
 
         ctx.restore()
         requestAnimationFrame(animate)
