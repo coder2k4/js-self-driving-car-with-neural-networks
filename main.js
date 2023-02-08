@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
     animate()
 
     function animate() {
-        car.update(road.borders)
+        car.update(road.borders);
         canvas.height = window.innerHeight // очищаем хост
 
         ctx.save()
