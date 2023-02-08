@@ -8,8 +8,6 @@ class Sensor {
 
 
         this.rays = []
-
-        this.update();
     }
 
     update(roadBorders) {
@@ -28,13 +26,12 @@ class Sensor {
 
         for(let i=0;i<roadBorders.length;i++){
 
-            const touch=null
-            // const touch=getIntersection(
-            //     ray[0],
-            //     ray[1],
-            //     roadBorders[i][0],
-            //     roadBorders[i][1]
-            // );
+            const touch=getIntersection(
+                ray[0],
+                ray[1],
+                roadBorders[i][0],
+                roadBorders[i][1]
+            );
 
             if(touch){
                 touches.push(touch);
@@ -103,5 +100,4 @@ class Sensor {
             ctx.stroke();
         }
     }
-}
 }
