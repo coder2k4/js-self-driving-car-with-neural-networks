@@ -20,7 +20,8 @@ class Road {
 
         this.borders = [
             [topLeft, bottomLeft],
-            [topRight, bottomRight]]
+            [topRight, bottomRight]
+        ]
     }
 
     draw(ctx) {
@@ -56,9 +57,4 @@ class Road {
         const lineWidth = this.width / this.laneCount;
         return this.left + lineWidth / 2 + Math.min(laneIndex * lineWidth, this.laneCount * lineWidth)
     }
-}
-
-// Функция деления равные части
-function lerp(A, B, t) {
-    return A + (B - A) * t
 }
