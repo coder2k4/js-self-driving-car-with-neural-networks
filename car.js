@@ -1,34 +1,40 @@
 class Car {
-    constructor(x, y, width, height) {
+    constructor(x, y, width, height, controlType, maxSpeed = 3) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
 
-        this.speed = 0          // Текущая скорость
-        this.acceleration = .2  // Ускорение
-        this.maxSpeed = 3       // Максимальная скорость
-        this.friction = 0.05    // Трение - замедление
-        this.angle = 0          // Текущий угол поворота машины
+        this.speed = 0              // Текущая скорость
+        this.acceleration = .2      // Ускорение
+        this.maxSpeed = maxSpeed    // Максимальная скорость
+        this.friction = 0.05        // Трение - замедление
+        this.angle = 0              // Текущий угол поворота машины
 
-        this.damaged = false    // Получила ли машина повреждения
+        this.damaged = false        // Получила ли машина повреждения
 
         //Сенсоры
-        this.sensor = new Sensor(this)
+        if(controlType==='KEYS')
+            this.sensor = new Sensor(this)
         // Управление
-        this.controls = new Controls()
+        this.controls = new Controls(controlType)
 
-        // Получаем 4точки по краям квадрата машины
-        this.poligon = this.#createPolygon()
+        // // Получаем 4точки по краям квадрата машины
+        // this.poligon = this.#createPolygon()
     }
 
-    update(roadBorders) {
+    update(roadBorders, traffic) {
         if (!this.damaged) {
             this.#move();
             this.polygon = this.#createPolygon();
-            this.damaged = this.#assessDamage(roadBorders);
+            this.damaged = this.#assessDamage(roadBorders, traffic);
         }
-        this.sensor.update(roadBorders);
+
+        if(this.sensor)
+        {
+            this.sensor.update(roadBorders, traffic);
+        }
+
     }
 
     #createPolygon() {
@@ -57,12 +63,19 @@ class Car {
         return points
     }
 
-    #assessDamage(roadBorders) {
+    #assessDamage(roadBorders, traffic) {
         for (let i = 0; i < roadBorders.length; i++) {
             if (polysIntersect(this.polygon, roadBorders[i])) {
                 return true;
             }
         }
+
+        for (let i = 0; i < traffic.length; i++) {
+            if (polysIntersect(this.polygon, traffic[i].polygon)) {
+                return true;
+            }
+        }
+
         return false;
     }
 
@@ -147,6 +160,7 @@ class Car {
           ctx.restore()
           */
 
-        this.sensor.draw(ctx)
+        if(this.sensor)
+            this.sensor.draw(ctx)
     }
 }
