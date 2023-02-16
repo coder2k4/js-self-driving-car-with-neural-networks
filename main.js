@@ -40,10 +40,10 @@ document.addEventListener("DOMContentLoaded", () => {
         road.draw(ctx)
 
         traffic.forEach(car => {
-            car.draw(ctx);
+            car.draw(ctx, "blue");
         })
 
-        car.draw(ctx)
+        car.draw(ctx, "green")
 
 
         ctx.restore()
