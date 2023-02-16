@@ -1,17 +1,20 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    const canvas = document.getElementById("myCanvas");
-    canvas.width = 400;
+    const carCanvas = document.getElementById("carCanvas");
+    carCanvas.width = 400;
+    const networkCanvas = document.getElementById("networkCanvas");
+    networkCanvas.width = 600;
 
-    const road = new Road(canvas.width / 2, canvas.width * 0.9)
+    const road = new Road(carCanvas.width / 2, carCanvas.width * 0.9)
     const lineCenter = road.getLaneCenter(2)
 
 
-    const ctx = canvas.getContext("2d");
+    const ctxCar = carCanvas.getContext("2d");
+    const ctxNetwork = networkCanvas.getContext("2d");
 
 
     // Отрисовка машины игрока
-    const car = new Car(lineCenter, 100, 30, 50, "KEYS");
+    const car = new Car(lineCenter, 100, 30, 50, "AI");
 
 
     // Машины манекены
@@ -26,27 +29,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
     animate()
 
-    function animate() {
-        for(let i=0;i<traffic.length;i++){
-            traffic[i].update(road.borders,[]);
+    function animate(time) {
+        for (let i = 0; i < traffic.length; i++) {
+            traffic[i].update(road.borders, []);
         }
-        car.update(road.borders,traffic)
+        car.update(road.borders, traffic)
 
-        canvas.height = window.innerHeight // очищаем хост
+        carCanvas.height = window.innerHeight // очищаем хост
+        networkCanvas.height = window.innerHeight // очищаем хост
 
-        ctx.save()
-        ctx.translate(0, -car.y + canvas.height * 0.5)
+        ctxCar.save()
+        ctxCar.translate(0, -car.y + carCanvas.height * 0.5)
 
-        road.draw(ctx)
+        road.draw(ctxCar)
 
         traffic.forEach(car => {
-            car.draw(ctx, "blue");
+            car.draw(ctxCar, "blue");
         })
 
-        car.draw(ctx, "green")
+        car.draw(ctxCar, "green")
+
+        ctxNetwork.lineDashOffset = -time / 50
+        Visualizer.drawNetwork(ctxNetwork, car.brain)
 
 
-        ctx.restore()
+        ctxCar.restore()
         requestAnimationFrame(animate)
     }
 
